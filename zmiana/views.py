@@ -12,3 +12,8 @@ class IndexView(View):
 class MyDuty(View):
     def get(self, request):
         return render(request, template_name='zmiana/my_duty.html')
+
+
+class DutyProposal(View):
+    def get(self, request):
+        return render(request, template_name='zmiana/duty_proposal.html')

@@ -18,9 +18,12 @@ from django.contrib import admin
 from django.urls import path
 
 from zmiana import views
-
+from accounts import views as accounts_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.IndexView.as_view(), name='home'),
     path('my_duty/', views.MyDuty.as_view(), name='my_duty'),
+    path('duty_proposal/', views.DutyProposal.as_view(), name='duty_proposal'),
+    path('register/', accounts_views.RegisterView.as_view(), name='register'),
+
 ]
