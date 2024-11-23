@@ -22,4 +22,5 @@ from zmiana import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.IndexView.as_view(), name='home'),
+    path('my_duty/', views.MyDuty.as_view(), name='my_duty'),
 ]

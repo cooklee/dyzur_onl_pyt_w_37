@@ -7,3 +7,8 @@ from django.views import View
 class IndexView(View):
     def get(self, request):
         return render(request, template_name='base.html')
+
+
+class MyDuty(View):
+    def get(self, request):
+        return render(request, template_name='zmiana/my_duty.html')
