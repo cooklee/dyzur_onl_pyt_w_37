@@ -25,5 +25,9 @@ urlpatterns = [
     path('my_duty/', views.MyDuty.as_view(), name='my_duty'),
     path('duty_proposal/', views.DutyProposal.as_view(), name='duty_proposal'),
     path('register/', accounts_views.RegisterView.as_view(), name='register'),
+    path('login/', accounts_views.LoginView.as_view(), name='login'),
+    path('logout/', accounts_views.LogoutView.as_view(), name='logout'),
+    path('change_password/', accounts_views.ChangePasswordView.as_view(), name='change_password'),
 
+    path('add_new_shift/', views.AddNewShiftView.as_view(), name='add_new_shift'),
 ]

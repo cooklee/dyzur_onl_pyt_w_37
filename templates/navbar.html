@@ -1,5 +1,17 @@
 <div class="topnav">
+    <div>
     <a href="{% url 'home' %}">Home</a>
+    <a href="{% url 'add_new_shift' %}">dodaj dyżur</a>
     <a href="{% url 'my_duty' %}">Moje dyżury</a>
     <a href="{% url 'duty_proposal' %}">propozycja dyzurów</a>
+    </div>
+    <div>
+        {% if user.is_authenticated %}
+            {{ user.username }}
+            <a href="{% url 'logout' %}">wyloguj</a>
+        {% else %}
+            <a href="{% url 'login' %}">zaloguj</a><br>
+            <a href="{% url 'register' %}">rejestracja</a><br>
+        {% endif %}
+    </div>
 </div>

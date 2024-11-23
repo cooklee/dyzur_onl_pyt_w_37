@@ -14,6 +14,13 @@
 {%  include 'navbar.html' %}
 
 <div style="padding-left:16px">
+    <div class="Error_list">
+        <ul>
+            {%  for error in messages %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    </div>
     {% block zawartosc %}
         <h2>Top Navigation Example</h2>
         <p>Some content..</p>
