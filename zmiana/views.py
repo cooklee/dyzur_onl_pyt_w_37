@@ -23,7 +23,8 @@ class IndexView(View):
 
 class MyDuty(MyLoginRequiredMixin, View):
     def get(self, request):
-        return render(request, template_name='zmiana/my_duty.html')
+        shifts = Shift.objects.filter(owner=request.user).order_by('date')
+        return render(request, template_name='zmiana/my_duty.html',context={'shifts':shifts})
 
 
 class AddNewShiftView(MyLoginRequiredMixin, View):

@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% block zawartosc %}
-    to jest widok moich dyzurow w biezacym miesiacu!!!
-    {{ user.username }}
-    {{ x }}
+    <h1>zmiany</h1>
+    <ul>
+    {% for shift in shifts%}
+        <li>{{ shift.date }}</li>
+    {% endfor %}
+    </ul>
+
 {% endblock %}
