@@ -8,7 +8,7 @@ class Shift(models.Model):
     active = models.BooleanField(default=True)
 
     def __str__(self):
-        return f'{self.owner} {self.date}'
+        return f'{self.owner} {self.date} {self.active}'
 
     class Meta:
         constraints = [

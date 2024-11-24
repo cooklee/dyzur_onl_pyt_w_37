@@ -1,15 +1,7 @@
 {% extends 'base.html' %}
 {% block zawartosc %}
     <p>Moje propozycje</p>
-    <ul>
-    {% for item in my_proposal %}
-        <li>{{ item.from_shift.date }} {{ item.from_shift.owner }} na {{ item.to_shift.date }} </li>
-    {% endfor %}
-    </ul>
+    {% include 'zmiana/proposal_list.html' with proposals=my_proposal buttons=False%}
     <p>dle mnie propozycje</p>
-    <ul>
-    {% for item in requested_proposals %}
-        <li>{{ item.from_shift.date }} {{ item.from_shift.owner }} na {{ item.to_shift.date }}  <button>Accept</button></li>
-    {% endfor %}
-    </ul>
+    {% include 'zmiana/proposal_list.html' with proposals=requested_proposals buttons=True%}
 {% endblock %}

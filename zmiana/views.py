@@ -70,3 +70,21 @@ class MyShiftProposalView(MyLoginRequiredMixin, View):
         return render(request,
                       'zmiana/shift_proposal_view.html', {'requested_proposals':requested_proposals,
                                                           'my_proposal':my_proposal})
+
+
+class AcceptProposalView(MyLoginRequiredMixin, View):
+
+    def get(self, request, pk):
+        csp = ChangeShiftProposal.objects.get(pk=pk)
+
+        csp.accepted = True
+        csp.save()
+        csp.to_shift.active = False
+        csp.to_shift.save()
+        csp.from_shift.active = False
+        csp.from_shift.save()
+        from_user = csp.from_shift.owner
+        to_user = csp.to_shift.owner
+        Shift.objects.create(owner=from_user, date=csp.to_shift.date)
+        Shift.objects.create(owner=to_user, date=csp.from_shift.date)
+        return redirect('my_duty')

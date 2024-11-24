@@ -1,0 +1,10 @@
+<ul>
+    {% for item in proposals %}
+        <li>{{ item.from_shift.date }} {{ item.from_shift.owner }} na {{ item.to_shift.date }}
+            {% if buttons %}
+            </o><a href="{% url 'proposal_accept' item.id %}">akceptuj</a>
+            {% endif %}
+
+        </li>
+    {% endfor %}
+</ul>
