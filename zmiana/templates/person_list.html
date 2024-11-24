@@ -1,0 +1,8 @@
+{% extends 'base.html' %}\
+{% block zawartosc %}
+    <ul>
+    {% for person in object_list %}
+        <li>{{ person }}</li>
+    {% endfor%}
+    </ul>
+{% endblock %}

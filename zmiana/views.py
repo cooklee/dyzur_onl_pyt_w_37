@@ -4,10 +4,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, 
 from django.contrib.auth.models import Permission
 from django.http import  HttpResponse
 from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
 from django.views import View
+from django.views.generic import CreateView, UpdateView, DetailView, ListView, DeleteView
 
-from zmiana.forms import ChangeShiftForm
-from zmiana.models import Shift, ChangeShiftProposal
+from zmiana.forms import ChangeShiftForm, AddPersonForm
+from zmiana.models import Shift, ChangeShiftProposal, Person
 
 
 class MyLoginRequiredMixin(LoginRequiredMixin):
@@ -40,8 +42,9 @@ class AddNewShiftView(MyLoginRequiredMixin, View):
 
 
 
-class DutyProposal(PermissionRequiredMixin, View):
-    permission_required = ['zmiana.change_shift']
+class DutyProposal(View):
+    #class DutyProposal(PermissionRequiredMixin, View):
+    # permission_required = ['zmiana.change_shift']
     def get(self, request):
         return render(request, template_name='zmiana/duty_proposal.html')
 
@@ -50,7 +53,7 @@ class ShiftChangeProposalView(MyLoginRequiredMixin, View):
 
     def get(self, request):
         form = ChangeShiftForm(user=request.user)
-        return render(request, 'zmiana/change_shift_form.html', {'form': form})
+        return render(request, 'form.html', {'form': form})
 
 
     def post(self, request):
@@ -61,7 +64,7 @@ class ShiftChangeProposalView(MyLoginRequiredMixin, View):
             csp = ChangeShiftProposal(from_shift=from_shift, to_shift=to_shift)
             csp.save()
             return redirect('home')
-        return render(request, 'zmiana/change_shift_form.html', {'form': form})
+        return render(request, 'form.html', {'form': form})
 
 
 class MyShiftProposalView(MyLoginRequiredMixin, View):
@@ -96,3 +99,44 @@ class AcceptProposalView(UserPassesTestMixin, View):
         Shift.objects.create(owner=from_user, date=csp.to_shift.date)
         Shift.objects.create(owner=to_user, date=csp.from_shift.date)
         return redirect('my_duty')
+
+
+class AddPersonView(View):
+    def get(self, request):
+        form = AddPersonForm()
+        return render(request, 'form.html', {'form':form})
+
+    def post(self, request):
+        form = AddPersonForm(request.POST)
+        if form.is_valid():
+            person = form.save()
+            return redirect('home')
+        return render(request, 'form.html', {'form': form})
+
+
+class AddPersonViewGeneric(CreateView):
+    model = Person
+    form_class = AddPersonForm
+    success_url = reverse_lazy('home')
+    template_name = 'form.html'
+
+class UpdatePersonView(UpdateView):
+    model = Person
+    form_class = AddPersonForm
+    success_url = reverse_lazy('home')
+    template_name = 'form.html'
+
+class DetailPersonView(DetailView):
+    model = Person
+    template_name = 'cos.html'
+
+class PersonListView(ListView):
+    model = Person
+    template_name = 'person_list.html'
+
+class DeletePersonView(DeleteView):
+    model = Person
+    success_url = reverse_lazy('home')
+    template_name = 'confirm_delete.html'
+
+

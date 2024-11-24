@@ -1,0 +1,89 @@
+
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="/static/base.css">
+
+</head>
+<body>
+
+<div class="topnav">
+    <div>
+        <a href="/">Home</a>
+        <a href="/add_new_shift/">dodaj dyżur</a>
+        <a href="/my_duty/">Moje dyżury</a>
+        <a href="/duty_proposal/">propozycja dyzurów</a>
+        <a href="/my_shift_proposal/">propozycja zmiany dyzurów</a>
+    </div>
+    <div>
+
+            cooklee
+            <a href="/logout/">wyloguj</a>
+
+    </div>
+</div>
+
+<div style="padding-left:16px">
+    <div class="Error_list">
+        <ul>
+
+        </ul>
+    </div>
+
+    <form method="post" class="jajko">
+       {% csrf_token %}
+        <p>
+    <label for="id_from_shift">From shift:</label>
+    <select name="from_shift" required id="id_from_shift">
+  <option value="" selected>---------</option>
+
+  <option value="17">cooklee 2024-11-17 True</option>
+
+  <option value="8">cooklee 2024-11-26 True</option>
+
+  <option value="10">cooklee 2024-11-29 True</option>
+
+</select>
+
+
+  </p>
+
+
+  <p>
+    <label for="id_to_shift">To shift:</label>
+    <select name="to_shift" required id="id_to_shift">
+  <option value="" selected>---------</option>
+
+  <option value="16">przemek 2024-11-07 True</option>
+
+  <option value="12">przemek 2024-11-18 True</option>
+
+  <option value="13">przemek 2024-11-19 True</option>
+
+  <option value="6">gosia 2024-11-20 True</option>
+
+  <option value="14">przemek 2024-11-20 True</option>
+
+  <option value="15">przemek 2024-11-21 True</option>
+
+  <option value="9">gosia 2024-11-27 True</option>
+
+</select>
+
+
+
+
+  </p>
+        <input type="submit">
+    </form>
+
+</div>
+</body>
+</html>

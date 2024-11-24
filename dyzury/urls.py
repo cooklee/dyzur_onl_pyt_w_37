@@ -33,4 +33,6 @@ urlpatterns = [
     path('change_shift_proposal/', views.ShiftChangeProposalView.as_view(), name='change_shift_proposal'),
     path('my_shift_proposal/', views.MyShiftProposalView.as_view(), name='my_shift_proposal'),
     path('proposal/<int:pk>/accept/', views.AcceptProposalView.as_view(), name='proposal_accept'),
+    path('add_person/', views.AddPersonView.as_view(), name='add_person'),
+    path('update_person/<int:pk>/', views.UpdatePersonView.as_view(), name='update_person'),
 ]
