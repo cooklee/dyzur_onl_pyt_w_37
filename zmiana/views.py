@@ -1,6 +1,7 @@
 
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
+from django.contrib.auth.models import Permission
 from django.http import  HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
@@ -23,7 +24,7 @@ class IndexView(View):
 
 class MyDuty(MyLoginRequiredMixin, View):
     def get(self, request):
-        shifts = Shift.objects.filter(owner=request.user).order_by('date')
+        shifts = Shift.objects.filter(owner=request.user, active=True).order_by('date')
         return render(request, template_name='zmiana/my_duty.html',context={'shifts':shifts})
 
 
@@ -39,7 +40,8 @@ class AddNewShiftView(MyLoginRequiredMixin, View):
 
 
 
-class DutyProposal(View):
+class DutyProposal(PermissionRequiredMixin, View):
+    permission_required = ['zmiana.change_shift']
     def get(self, request):
         return render(request, template_name='zmiana/duty_proposal.html')
 
@@ -65,14 +67,20 @@ class ShiftChangeProposalView(MyLoginRequiredMixin, View):
 class MyShiftProposalView(MyLoginRequiredMixin, View):
 
     def get(self, request):
-        requested_proposals = ChangeShiftProposal.objects.filter(to_shift__owner=request.user).order_by('date')
-        my_proposal = ChangeShiftProposal.objects.filter(from_shift__owner=request.user).order_by('date')
+        requested_proposals = ChangeShiftProposal.objects.filter(to_shift__owner=request.user, accepted=False).order_by('date')
+        my_proposal = ChangeShiftProposal.objects.filter(from_shift__owner=request.user, accepted=False).order_by('date')
         return render(request,
                       'zmiana/shift_proposal_view.html', {'requested_proposals':requested_proposals,
                                                           'my_proposal':my_proposal})
 
 
-class AcceptProposalView(MyLoginRequiredMixin, View):
+class AcceptProposalView(UserPassesTestMixin, View):
+
+    def test_func(self):
+        pk = self.kwargs['pk']
+        csp = ChangeShiftProposal.objects.get(pk=pk)
+        return csp.to_shift.owner == self.request.user
+
 
     def get(self, request, pk):
         csp = ChangeShiftProposal.objects.get(pk=pk)

@@ -9,5 +9,6 @@ class ChangeShiftForm(forms.Form):
 
     def __init__(self, *args,user=None, **kwargs):
         super().__init__(*args,**kwargs)
-        self.fields['from_shift'].queryset=Shift.objects.filter(owner=user)
-        self.fields['to_shift'].queryset=Shift.objects.exclude(owner=user)
+        self.fields['from_shift'].queryset=Shift.objects.filter(owner=user, active=True)
+        qs = Shift.objects.filter(active=True)
+        self.fields['to_shift'].queryset=qs.exclude(owner=user)

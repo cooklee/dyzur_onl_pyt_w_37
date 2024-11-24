@@ -14,6 +14,7 @@ class Shift(models.Model):
         constraints = [
             models.UniqueConstraint(fields=['owner', 'date'],name='unique_shift_owner'),
         ]
+        ordering = ['date']
 
 
 class ChangeShiftProposal(models.Model):
