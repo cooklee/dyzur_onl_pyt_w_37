@@ -5,7 +5,8 @@ from django.http import  HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
 
-from zmiana.models import Shift
+from zmiana.forms import ChangeShiftForm
+from zmiana.models import Shift, ChangeShiftProposal
 
 
 class MyLoginRequiredMixin(LoginRequiredMixin):
@@ -41,3 +42,31 @@ class AddNewShiftView(MyLoginRequiredMixin, View):
 class DutyProposal(View):
     def get(self, request):
         return render(request, template_name='zmiana/duty_proposal.html')
+
+
+class ShiftChangeProposalView(MyLoginRequiredMixin, View):
+
+    def get(self, request):
+        form = ChangeShiftForm(user=request.user)
+        return render(request, 'zmiana/change_shift_form.html', {'form': form})
+
+
+    def post(self, request):
+        form = ChangeShiftForm(request.POST, user=request.user)
+        if form.is_valid():
+            from_shift = form.cleaned_data['from_shift']
+            to_shift = form.cleaned_data['to_shift']
+            csp = ChangeShiftProposal(from_shift=from_shift, to_shift=to_shift)
+            csp.save()
+            return redirect('home')
+        return render(request, 'zmiana/change_shift_form.html', {'form': form})
+
+
+class MyShiftProposalView(MyLoginRequiredMixin, View):
+
+    def get(self, request):
+        requested_proposals = ChangeShiftProposal.objects.filter(to_shift__owner=request.user).order_by('date')
+        my_proposal = ChangeShiftProposal.objects.filter(from_shift__owner=request.user).order_by('date')
+        return render(request,
+                      'zmiana/shift_proposal_view.html', {'requested_proposals':requested_proposals,
+                                                          'my_proposal':my_proposal})

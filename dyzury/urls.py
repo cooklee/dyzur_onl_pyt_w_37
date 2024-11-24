@@ -30,4 +30,6 @@ urlpatterns = [
     path('change_password/', accounts_views.ChangePasswordView.as_view(), name='change_password'),
 
     path('add_new_shift/', views.AddNewShiftView.as_view(), name='add_new_shift'),
+    path('change_shift_proposal/', views.ShiftChangeProposalView.as_view(), name='change_shift_proposal'),
+    path('my_shift_proposal/', views.MyShiftProposalView.as_view(), name='my_shift_proposal'),
 ]

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block zawartosc %}
+    <p>Moje propozycje</p>
+    <ul>
+    {% for item in my_proposal %}
+        <li>{{ item.from_shift.date }} {{ item.from_shift.owner }} na {{ item.to_shift.date }} </li>
+    {% endfor %}
+    </ul>
+    <p>dle mnie propozycje</p>
+    <ul>
+    {% for item in requested_proposals %}
+        <li>{{ item.from_shift.date }} {{ item.from_shift.owner }} na {{ item.to_shift.date }}  <button>Accept</button></li>
+    {% endfor %}
+    </ul>
+{% endblock %}

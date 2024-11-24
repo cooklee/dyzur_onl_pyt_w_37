@@ -4,6 +4,7 @@
     <a href="{% url 'add_new_shift' %}">dodaj dyżur</a>
     <a href="{% url 'my_duty' %}">Moje dyżury</a>
     <a href="{% url 'duty_proposal' %}">propozycja dyzurów</a>
+    <a href="{% url 'my_shift_proposal' %}">propozycja zmiany dyzurów</a>
     </div>
     <div>
         {% if user.is_authenticated %}
