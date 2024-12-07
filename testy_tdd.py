@@ -7,6 +7,7 @@
 from xmlrpc.client import Fault
 
 import pytest
+from django.db.models.expressions import result
 
 
 def prime_numbers(n):
@@ -36,20 +37,36 @@ def test_tdd_prime_number(n, lst):
     assert prime_numbers(n) == lst
 
 
-def check_password(password):
+def check_upper(password):
+    return any(x for x in password if x.isupper())
+
+def check_lower(password):
+    return any(x for x in password if x.islower())
+
+def check_length(password):
+    return len(password) >= 8
+
+def check_digit(password):
+    return any(x for x in password if x.isdigit())
+
+def check_special(password):
     special = "!@#$%^&*()_+}{\":?><';/.,]["
-    return (any(x for x in password if x.isupper()) and
-            any(x for x in password if x.islower()) and
-            any(x for x in password if x.isdigit()) and
-            any(x for x in password if x in special) and
-            len(password) >= 8)
+    return any(x for x in password if x in special)
+
+def check_password(password):
+    validators = [check_upper, check_lower, check_length, check_digit, check_special]
+    result = True
+    for validator in validators:
+        result = result and validator(password)
+    return result
+
 
 
 @pytest.mark.parametrize("password, result", [
-    ('aaaa', False),
-    ('Aaaa', False),
-    ('AAAA', False),
-    ('1aAA', False),
+    ('a;1a;2a2', False),
+    ('AAAAAA;4', False),
+    ('AAaaAAa;', False),
+    ('AAaa;;2', False),
     ('1aAA0000', False),
     ('1aAA00;0', True)
 ])
