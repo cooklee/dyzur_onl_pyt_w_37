@@ -27,6 +27,16 @@ def shifts(user, user2):
         shifts[u.id] = sh
     return shifts
 
+@pytest.fixture
+def shift(user):
+    s = Shift.objects.create(owner=user, active=True, date= datetime(1999,1,2).date())
+    return s
+
+@pytest.fixture
+def shift2(user2):
+    s = Shift.objects.create(owner=user2, active=True, date= datetime(1999,1,1).date())
+    return s
+
 
 @pytest.fixture
 def shifts_2(user):

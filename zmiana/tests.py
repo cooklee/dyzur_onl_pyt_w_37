@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 from django.test import Client
 from django.urls import reverse
 
-from zmiana.models import Shift
+from zmiana.forms import ChangeShiftForm
+from zmiana.models import Shift, ChangeShiftProposal
 
 
 @pytest.mark.django_db
@@ -71,6 +72,29 @@ def test_add_new_shift_post(user):
     assert response.url.startswith(reverse('add_new_shift'))
     assert Shift.objects.count()==1
 
+@pytest.mark.django_db
+def test_change_shift_proposal_get(user, user2,shift, shift2):
+    client = Client()
+    client.force_login(user)
+    url = reverse('change_shift_proposal')
+    response = client.get(url)
+    assert response.status_code == 200
+    assert isinstance(response.context['form'], ChangeShiftForm)
+
+@pytest.mark.django_db
+def test_change_shift_proposal_post(user, user2,shift, shift2):
+    client = Client()
+    client.force_login(user)
+    url = reverse('change_shift_proposal')
+    dane = {
+        'from_shift':shift.id,
+        'to_shift':shift2.id,
+    }
+    response = client.post(url, dane)
+    assert response.status_code == 302
+    assert response.url.startswith(reverse('home'))
+    shift.refresh_from_db()
+    assert ChangeShiftProposal.objects.first()
 
 
 
