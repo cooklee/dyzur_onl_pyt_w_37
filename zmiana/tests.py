@@ -1,4 +1,5 @@
 import pytest
+from django.contrib.auth.models import User
 from django.test import Client
 from django.urls import reverse
 
@@ -13,8 +14,23 @@ def test_index_view():
 
 @pytest.mark.django_db
 def test_my_duty_not_login():
-    client = Client() # tworze przegladarke
-    url = reverse('my_duty') # pobieram z url'a adres na który bede chciał wejść
-    response = client.get(url) # używam przeglądarki by wejść na zadany adres
-    assert response.status_code == 302 # sprawdzam czy status odpwiedzi jest oczekiwanym statusem
+    client = Client()  # tworze przegladarke
+    url = reverse('my_duty')  # pobieram z url'a adres na który bede chciał wejść
+    response = client.get(url)  # używam przeglądarki by wejść na zadany adres
+    assert response.status_code == 302  # sprawdzam czy status odpwiedzi jest oczekiwanym statusem
     assert response.url.startswith(reverse('login'))
+
+
+@pytest.mark.django_db
+def test_my_duty_login(user, shifts):
+    client = Client()
+    client.force_login(user)
+    url = reverse('my_duty')  # pobieram z url'a adres na który bede chciał wejść
+    response = client.get(url)  # używam przeglądarki by wejść na zadany adres
+    assert response.status_code == 200
+    user_shift = response.context['shifts']
+    assert user_shift.count() == len(shifts[user.id])
+    for my_shift in shifts[user.id]:
+        assert my_shift in user_shift
+
+
